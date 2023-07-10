@@ -30,7 +30,8 @@ class MetatricSpider(CrawlSpider):
                     return
         yield scrapy.Request(url=complete_url, callback=self.get_full_data)
 
-    def get_full_data(self, response):
+    @staticmethod
+    def get_full_data(response):
         details = MovieItem()
         details['Title'] = response.css('h1::text').extract_first()
         details['USER_SCORE'] = response.css('a.metascore_anchor > span::text').extract()[1]
