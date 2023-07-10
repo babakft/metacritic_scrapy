@@ -10,6 +10,11 @@ class MetatricSpider(CrawlSpider):
     name = "metatric"
     allowed_domains = ["metacritic.com"]
     start_urls = ["https://www.metacritic.com/browse/movies/score/metascore/all"]
+    custom_setting = {
+        'ITEM_PIPELINES': {
+             "crawler.pipelines.SaveData": 300,
+        }
+    }
     rules = [
         Rule(LinkExtractor(allow='/movie/', deny=('/user-reviews', '/critic-reviews')),
              callback="parse_item", follow=False),

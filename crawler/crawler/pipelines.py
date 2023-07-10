@@ -9,7 +9,7 @@ from itemadapter import ItemAdapter
 import csv
 
 
-class CrawlerPipeline:
+class SaveData:
     def process_item(self, item, spider):
         """add the crawled link in a file"""
         with open('crawled_link.txt', 'a', newline='') as link:
