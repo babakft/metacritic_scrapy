@@ -1,5 +1,3 @@
-import time
-
 import scrapy
 from scrapy.spiders import Rule, CrawlSpider
 from scrapy.linkextractors import LinkExtractor
@@ -10,10 +8,12 @@ class MetatricSpider(CrawlSpider):
     name = "metatric"
     allowed_domains = ["metacritic.com"]
     start_urls = ["https://www.metacritic.com/browse/movies/score/metascore/all"]
-    custom_setting = {
+    custom_settings = {
         'ITEM_PIPELINES': {
-             "crawler.pipelines.SaveData": 300,
-        }
+            "crawler.pipelines.SaveData": 300},
+        'CONCURRENT_REQUESTS': 5,
+        'DOWNLOAD_DELAY': 0.5
+
     }
     rules = [
         Rule(LinkExtractor(allow='/movie/', deny=('/user-reviews', '/critic-reviews')),

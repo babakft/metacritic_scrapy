@@ -25,3 +25,9 @@ class SaveData:
                  item['PrincipleCast'], item['Cast'], item['Director'], item['url']])
             csv_file.close()
         return item
+
+
+class UpdateData:
+    def process_item(self, item, spider):
+        pass
+
