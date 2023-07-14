@@ -18,9 +18,11 @@ class UsersBestNewMovieSpider(CrawlSpider):
                   callback="parse_item", follow=False)]
 
     def parse_item(self, response):
+        """the full data url is a little different"""
         yield scrapy.Request(url=response.url + '/details', callback=self.get_full_data)
 
-    def get_full_data(self, response):
+    @staticmethod
+    def get_full_data(response):
         details = MovieItem()
         details['Title'] = response.css('h1::text').extract_first()
         details['USER_SCORE'] = response.css('a.metascore_anchor > span::text').extract()[1]

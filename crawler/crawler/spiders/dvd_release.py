@@ -12,13 +12,14 @@ class DvdReleaseSpider(CrawlSpider):
         'ITEM_PIPELINES': {
             "crawler.pipelines.UpdateData": 300},
         'CONCURRENT_REQUESTS': 1,
-        # 'DOWNLOAD_DELAY': 1
+        'DOWNLOAD_DELAY': 1
 
     }
     rules = [Rule(LinkExtractor(allow='/movie/', deny=('/user-reviews', '/critic-reviews')),
                   callback="parse_item", follow=False)]
 
     def parse_item(self, response):
+        """the full data url is a little different"""
         yield scrapy.Request(url=response.url + '/details', callback=self.get_full_data)
 
     @staticmethod

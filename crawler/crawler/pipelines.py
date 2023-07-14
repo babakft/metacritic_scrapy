@@ -3,12 +3,10 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 import os
-import time
 
 # useful for handling different item types with a single interface
-from itemadapter import ItemAdapter
+
 import csv
-import pandas as pd
 
 
 class SaveData:
@@ -32,7 +30,7 @@ class SaveData:
 
 class UpdateData:
     def process_item(self, item, spider):
-        """if already exists update movie detail"""
+        """if it is already crawled it will delete it and add it again or if it is new it will add it"""
         with open('crawled_link.txt', 'r') as crawled_link:
             for link in crawled_link:
                 if link.rstrip('\n') == item['url']:

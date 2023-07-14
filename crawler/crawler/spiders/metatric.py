@@ -18,12 +18,16 @@ class MetatricSpider(CrawlSpider):
     rules = [
         Rule(LinkExtractor(allow='/movie/', deny=('/user-reviews', '/critic-reviews')),
              callback="parse_item", follow=False),
+
         Rule(LinkExtractor(restrict_css='a.action'), follow=True)
+        # extract next page url
     ]
 
     def parse_item(self, response):
+        """the full data url is a little different"""
         complete_url = response.url + '/details'
 
+        """check if the data is already crawled"""
         with open('crawled_link.txt', 'r') as crawled_link:
             for link in crawled_link:
                 if link.rstrip('\n') == complete_url:
