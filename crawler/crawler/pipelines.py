@@ -2,11 +2,13 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-
+import os
+import time
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 import csv
+import pandas as pd
 
 
 class SaveData:
@@ -34,30 +36,29 @@ class UpdateData:
         with open('crawled_link.txt', 'r') as crawled_link:
             for link in crawled_link:
                 if link.rstrip('\n') == item['url']:
-                    self.__update_detail(item)
+                    self.__delete_movie(item)
+                    self.__new_movie(item, False)
                     return item
-            self.__new_movie(item)
+        crawled_link.close()
+
+        self.__new_movie(item, True)
+        return item
 
     @staticmethod
-    def __update_detail(item):
-        with open('crawled_movie.csv', 'r') as file:
-            reader = csv.DictReader(file)
-            for index, row in enumerate(reader):
+    def __delete_movie(item):
+        with open('crawled_movie.csv', 'r', newline='') as inp, open('first_edit.csv', 'w+', newline='') as out:
+            writer = csv.writer(out)
+            for row in csv.reader(inp):
+                if row[11] != item['url']:
+                    writer.writerow(row)
+        inp.close()
+        out.close()
 
-                if row['Title'] == item['Title']:
-                    row['USER_SCORE'] = item['USER_SCORE']
-                    row['Runtime'] = item['Runtime']
-                    row['Languages'] = item['Languages']
-                    row['METASCORE'] = item['METASCORE']
-                    row['Genrs'] = item['Genrs']
-                    row['Countries'] = item['Countries']
-                    row['Writers'] = item['Writers']
-                    row['PrincipleCast'] = item['PrincipleCast']
-                    row['Cast'] = item['Cast']
-                    row['Director'] = item['Director']
+        os.remove('crawled_movie.csv')
+        os.rename('first_edit.csv', 'crawled_movie.csv')
 
     @staticmethod
-    def __new_movie(item):
+    def __new_movie(item, write_in_txt):
         with open('crawled_movie.csv', 'a', newline='') as csv_file:
             file = csv.writer(csv_file)
             file.writerow(
@@ -66,6 +67,7 @@ class UpdateData:
                  item['PrincipleCast'], item['Cast'], item['Director'], item['url']])
             csv_file.close()
 
-        with open('crawled_link.txt', 'a', newline='') as link:
-            link.write(item['url'] + '\n')
-            link.close()
+        if write_in_txt:
+            with open('crawled_link.txt', 'a', newline='') as link:
+                link.write(item['url'] + '\n')
+                link.close()

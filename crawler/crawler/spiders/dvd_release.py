@@ -11,8 +11,8 @@ class DvdReleaseSpider(CrawlSpider):
     custom_settings = {
         'ITEM_PIPELINES': {
             "crawler.pipelines.UpdateData": 300},
-        'CONCURRENT_REQUESTS': 2,
-        'DOWNLOAD_DELAY': 1
+        'CONCURRENT_REQUESTS': 1,
+        # 'DOWNLOAD_DELAY': 1
 
     }
     rules = [Rule(LinkExtractor(allow='/movie/', deny=('/user-reviews', '/critic-reviews')),

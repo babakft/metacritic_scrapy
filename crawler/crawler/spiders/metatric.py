@@ -11,8 +11,8 @@ class MetatricSpider(CrawlSpider):
     custom_settings = {
         'ITEM_PIPELINES': {
             "crawler.pipelines.SaveData": 300},
-        'CONCURRENT_REQUESTS': 5,
-        'DOWNLOAD_DELAY': 0.5
+        'CONCURRENT_REQUESTS': 1,
+        'DOWNLOAD_DELAY': 10
 
     }
     rules = [
