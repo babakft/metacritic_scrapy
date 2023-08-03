@@ -11,8 +11,8 @@ class MetatricSpider(CrawlSpider):
     custom_settings = {
         'ITEM_PIPELINES': {
             "crawler.pipelines.SaveData": 300},
-        'CONCURRENT_REQUESTS': 1,
-        'DOWNLOAD_DELAY': 10
+        'CONCURRENT_REQUESTS': 5,
+        'DOWNLOAD_DELAY': 0.5
 
     }
     rules = [
@@ -28,7 +28,7 @@ class MetatricSpider(CrawlSpider):
         complete_url = response.url + '/details'
 
         """check if the data is already crawled"""
-        with open('crawled_link.txt', 'r') as crawled_link:
+        with open('extracted_data/crawled_link.txt', 'r') as crawled_link:
             for link in crawled_link:
                 if link.rstrip('\n') == complete_url:
                     return

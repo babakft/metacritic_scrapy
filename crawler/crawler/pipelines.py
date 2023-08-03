@@ -12,12 +12,12 @@ import csv
 class SaveData:
     def process_item(self, item, spider):
         """add the crawled link in a file"""
-        with open('crawled_link.txt', 'a', newline='') as link:
+        with open('extracted_data/crawled_link.txt', 'a', newline='') as link:
             link.write(item['url'] + '\n')
             link.close()
 
         """append data to csv file"""
-        with open('crawled_movie.csv', 'a', newline='') as csv_file:
+        with open('extracted_data/crawled_movie.csv', 'a', newline='') as csv_file:
             file = csv.writer(csv_file)
             file.writerow(
                 [item['Title'], item['USER_SCORE'], item['Runtime'], item['Languages'], item['METASCORE'],
@@ -31,7 +31,7 @@ class SaveData:
 class UpdateData:
     def process_item(self, item, spider):
         """if it is already crawled it will delete it and add it again or if it is new it will add it"""
-        with open('crawled_link.txt', 'r') as crawled_link:
+        with open('extracted_data/crawled_link.txt', 'r') as crawled_link:
             for link in crawled_link:
                 if link.rstrip('\n') == item['url']:
                     self.__delete_movie(item)
@@ -44,7 +44,8 @@ class UpdateData:
 
     @staticmethod
     def __delete_movie(item):
-        with open('crawled_movie.csv', 'r', newline='') as inp, open('first_edit.csv', 'w+', newline='') as out:
+        with open('extracted_data/crawled_movie.csv', 'r', newline='', encoding='latin-1') as inp, open(
+                'extracted_data/first_edit.csv', 'w+', newline='',encoding='latin-1') as out:
             writer = csv.writer(out)
             for row in csv.reader(inp):
                 if row[11] != item['url']:
@@ -52,12 +53,12 @@ class UpdateData:
         inp.close()
         out.close()
 
-        os.remove('crawled_movie.csv')
-        os.rename('first_edit.csv', 'crawled_movie.csv')
+        os.remove('extracted_data/crawled_movie.csv')
+        os.rename('extracted_data/first_edit.csv', 'extracted_data/crawled_movie.csv')
 
     @staticmethod
     def __new_movie(item, write_in_txt):
-        with open('crawled_movie.csv', 'a', newline='') as csv_file:
+        with open('extracted_data/crawled_movie.csv', 'a', newline='') as csv_file:
             file = csv.writer(csv_file)
             file.writerow(
                 [item['Title'], item['USER_SCORE'], item['Runtime'], item['Languages'], item['METASCORE'],
@@ -66,6 +67,6 @@ class UpdateData:
             csv_file.close()
 
         if write_in_txt:
-            with open('crawled_link.txt', 'a', newline='') as link:
+            with open('extracted_data/crawled_link.txt', 'a', newline='') as link:
                 link.write(item['url'] + '\n')
                 link.close()
