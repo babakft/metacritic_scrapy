@@ -17,4 +17,4 @@ The Metacritic Scraper is a project that collects the latest data of movies from
   + Director
   + url
 
-`the csv file`: [crawled_movie]()
+`the csv file`: [crawled_movie]('https://babakft.ir/metatric_scrapy/movie_crawler_metatric/crawler/crawler/spiders/extracted_data/crawled_movie.csv')
